@@ -3,9 +3,10 @@ import { cloneDeep } from "lodash";
 
 //components import
 import Preview from "./PreviewPost";
+import EmojiBoard from "./EmojiBoard";
 
 //constants import
-import { execCommands, emojis } from "./constans";
+import { execCommands } from "./constans";
 
 class Editor extends Component {
   constructor() {
@@ -14,25 +15,9 @@ class Editor extends Component {
       showLinkInput: false,
       currentHTML: "",
       range: {},
-      showEmojiBoard : false,
+      showEmojiBoard: false,
       isPreviewVisible: false
     };
-  }
-
-  handleExecButtonClick(command, value, e) {
-    e.preventDefault(); //preventing unselecting the selected text
-    e.stopPropagation();
-    let oldState = cloneDeep(this.state);
-    if (command === "link") {
-      oldState.showLinkInput = !this.state.showLinkInput;
-    } else if(command === 'emoji'){
-      oldState.showEmojiBoard = !this.state.showEmojiBoard;
-    } else{
-      let isExeced = document.execCommand(command, false, value);
-      console.log("performed execCommand was :", isExeced);
-    }
-    oldState.range = this.saveSelection();
-    this.setState(oldState);
   }
 
   saveSelection() {
@@ -59,12 +44,26 @@ class Editor extends Component {
     }
   }
 
+  handleExecButtonClick(command, value, e) {
+    e.preventDefault(); //preventing unselecting the selected text
+    let oldState = cloneDeep(this.state);
+    if (command === "link") {
+      oldState.showLinkInput = !this.state.showLinkInput;
+    } else if (command === "emoji") {
+      oldState.showEmojiBoard = !this.state.showEmojiBoard;
+    } else {
+      let isExeced = document.execCommand(command, false, value);
+      console.log("performed execCommand was :", isExeced);
+    }
+    oldState.range = this.saveSelection();
+    this.setState(oldState);
+  }
 
-  applyEmoji(emoji ,e){
+  applyEmoji(emoji, e) {
     let oldState = cloneDeep(this.state);
     oldState.showEmojiBoard = false;
-    this.setState(oldState,this.restoreSelection(this.state.range))
-    document.execCommand('insertText', false, emoji);
+    this.setState(oldState, this.restoreSelection(this.state.range));
+    document.execCommand("insertText", false, emoji);
   }
 
   handleLink(event) {
@@ -79,35 +78,27 @@ class Editor extends Component {
   }
 
   togglePreview() {
-    // alert('called')
-    console.log(this.refs);
     let oldState = cloneDeep(this.state);
     oldState.isPreviewVisible = !oldState.isPreviewVisible;
     oldState.currentHTML = this.refs.editor.innerHTML;
     this.setState(oldState);
   }
 
-  exportFile(){
-   
-      var file = new Blob([ new TextEncoder().encode( this.refs.editor.innerHTML ) ], {type: "text/plain;charset=utf-8"});
-      let href = window.URL.createObjectURL(file);
-
-      console.log(href, this.refs)
-      
-      this.refs.download.href = href;
-      this.refs.download.click();
-
-    
-  }
-
-  componentDidMount(){
-    this.saveSelection();
+  exportFile() {
+    var file = new Blob([new TextEncoder().encode(this.refs.editor.innerHTML)], {
+      type: "text/plain;charset=utf-8"
+    });
+    let href = window.URL.createObjectURL(file);
+    this.refs.download.href = href;
+    this.refs.download.click();
   }
 
   render() {
     return (
       <span className="editor">
-      <a href="#download" ref="download" download="export.html" className="hidden">downloadbutton</a>
+        <a href="#download" ref="download" download="export.html" className="hidden">
+          downloadbutton
+        </a>
         <div className="execButtons">
           {Object.keys(execCommands).map((command, index) => [
             <div
@@ -134,8 +125,6 @@ class Editor extends Component {
             )
           ])}
 
-          
-
           <span
             className={`execButton emoji`}
             onMouseDown={this.handleExecButtonClick.bind(this, "emoji", "")}
@@ -145,13 +134,10 @@ class Editor extends Component {
           >
             😉
           </span>
-          <div className={`emojiBoard ${this.state.showEmojiBoard ? '' : 'hidden'}`}>
-              {emojis.map(emoji => (
-                <span role="img" className="one-emoji" aria-label="emoji" onClick={this.applyEmoji.bind(this,emoji)}>
-                  {emoji}
-                </span>
-              ))}
-            </div>
+          <EmojiBoard
+            showEmojiBoard={this.state.showEmojiBoard}
+            applyEmoji={this.applyEmoji.bind(this)}
+          />
         </div>
         <div
           className="editable"
@@ -170,7 +156,9 @@ class Editor extends Component {
           <div className="button" onClick={this.togglePreview.bind(this)}>
             Preview Post
           </div>
-          <div className="button" onClick={this.exportFile.bind(this)}>Export</div>
+          <div className="button" onClick={this.exportFile.bind(this)}>
+            Export
+          </div>
         </div>
         <Preview
           currentHTML={this.state.currentHTML}
