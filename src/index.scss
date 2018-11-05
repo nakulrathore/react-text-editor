@@ -1,0 +1,245 @@
+@import "./assets/styles/colors.scss";
+@import url("https://fonts.googleapis.com/css?family=Raleway");
+
+html,
+body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: "Raleway", sans-serif;
+}
+
+*{
+  box-sizing: border-box;
+}
+.hidden{
+  display: none;
+  visibility: hidden;
+}
+
+//googled this shit
+[contentEditable=true]:empty:before{
+    content:attr(data-ph);
+    color:$gray-light;
+}
+
+
+.notepadx {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  .logo {
+    margin: 50px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-shrink: 0;
+    color: $black5;
+    font-size: 15px;
+    padding: 10px;
+    text-align: center;
+    letter-spacing: 1.2px;
+    > span {
+      >img{
+      width: 30px;
+      height: 30px;
+      }
+    }
+  }
+  .editor {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    flex-direction: column;
+
+    .execButtons {
+      padding: 10px 0;
+      font-size: 20px;
+      display: flex;
+      position: relative;
+
+      .emojiBoard{
+        position: absolute;
+        top:61px;
+        width: 200px;
+        background: white;
+        border-radius: 5px;
+        right: 1px;
+        height: 200px;
+        border: 1px solid $black4;
+        padding: 10px;
+        overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        .one-emoji{
+          // padding: 5px;
+          font-size: 15px;
+          cursor: pointer;
+          display: flex;
+          width: 30px;
+          height: 30px;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+          flex-grow: 0;
+          border: 1px solid white;
+          margin: 5px;
+          &:hover{
+            border-color: $black7;
+          }
+        }
+      }
+
+      .execButton {
+        margin: 0 10px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid $black7;
+        transition: all 0.2s ease-in;
+        color: $black7;
+        cursor: pointer;
+        border-radius: 3px;
+        &:hover {
+          // border-color: $black1;
+          color: $black1;
+          //   background: $gray-lighter;
+        }
+        &:first-child{
+            margin-left: 0;
+        }
+        &:last-child{
+            margin-right: 0;
+        }
+        &.bold {
+          font-weight: 600;
+        }
+        &.italic {
+          font-style: italic;
+          // font-weight: 600;
+        }
+        &.underline {
+          text-decoration: underline;
+        }
+        &.undo{
+          margin-left: auto;
+        }
+        
+        &.emoji{
+          position: relative;
+          margin-right: 0;
+        }
+        &.link{
+          margin-right: 0;
+          border-right: 0;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        &.input{
+          margin: 0;
+          border-left: 0;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+          width: 0px;
+          padding: 0;
+          
+          &.open{
+            padding: 0 5px;
+            width: 200px;
+          }
+
+          &:focus{
+            outline: 0px solid transparent;
+          }
+
+        }
+        
+      }
+    }
+    .editable {
+      flex: 1;
+      margin-bottom: 10px;
+      padding: 15px;
+      border: 2px solid $black7;
+      border-radius: 3px;
+      height: 100%;
+      font-size: 16px;
+      letter-spacing: 1.2px;
+      &:focus{
+        outline: 0px solid transparent;
+        border-color: $black4;    
+      }
+    }
+    .bigButtons{
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 50px;
+      .button{
+        border: 2px solid $black7;
+        padding: 5px 10px;
+        font-size: 16px;
+        text-align: center;
+        border-radius: 3px;
+        cursor: pointer;
+        color: $black7;
+        &:hover{
+          border-color: $black4;
+          color: $black3;
+        }
+      }
+    }
+
+    .preview-wrapper{
+      position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    top: 0;
+    left: 0;
+    background-color: rgba(52, 73, 94,0.2);
+    justify-content: center;
+
+    .preview-content{
+      width: 80%;
+      height: 80%;
+      background:white;
+      border: 2px solid $black5;
+      border-radius: 5px;
+      position: relative;
+      padding: 10px;
+      font-size: 16px;
+      letter-spacing: 1.2px;
+      line-height: 20px;
+      .close{
+        position: absolute;
+        top: -15px;
+        right: -15px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        border : 2px solid $black5;
+        border-radius: 50%;
+        cursor: pointer;
+        background: white;
+        transition: all 0.1s ease-in;
+        &:hover{
+          background: $black5;
+          color: white;
+        }
+      }
+    }
+    }
+  }
+}
